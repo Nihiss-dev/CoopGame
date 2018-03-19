@@ -17,9 +17,12 @@ ASCharacter::ASCharacter()
 	SpringArmComp->SetupAttachment(RootComponent);
 
 	GetMovementComponent()->GetNavAgentPropertiesRef().bCanCrouch = true;
-
+	
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	CameraComp->SetupAttachment(SpringArmComp);
+
+	ZoomedFOV = 65.0f;
+	ZoomInterpSpeed = 20.0f;
 }
 
 // Called when the game starts or when spawned
@@ -27,6 +30,7 @@ void ASCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	DefaultFOV = CameraComp->FieldOfView;
 }
 
 // Called every frame
@@ -34,6 +38,10 @@ void ASCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	float TargetFOV = bWantsToZoom ? ZoomedFOV : DefaultFOV;
+
+	float NewFOV = FMath::FInterpTo(CameraComp->FieldOfView, TargetFOV, DeltaTime, ZoomInterpSpeed);
+	CameraComp->SetFieldOfView(NewFOV);
 }
 
 // Called to bind functionality to input
@@ -51,6 +59,9 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &ASCharacter::EndCrouch);
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+
+	PlayerInputComponent->BindAction("Zoom", IE_Pressed, this, &ASCharacter::Zoom);
+	PlayerInputComponent->BindAction("Zoom", IE_Released, this, &ASCharacter::UnZoom);
 }
 
 void ASCharacter::MoveForward(float Value)
@@ -80,4 +91,14 @@ FVector ASCharacter::GetPawnViewLocation() const
 		return CameraComp->GetComponentLocation();
 	}
 	return Super::GetPawnViewLocation();
+}
+
+void ASCharacter::Zoom()
+{
+	bWantsToZoom = true;
+}
+
+void ASCharacter::UnZoom()
+{
+	bWantsToZoom = false;
 }

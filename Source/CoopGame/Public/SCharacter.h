@@ -28,11 +28,24 @@ protected:
 	void BeginCrouch();
 	void EndCrouch();
 
+	void Zoom();
+	void UnZoom();
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UCameraComponent *CameraComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USpringArmComponent *SpringArmComp;
+
+	bool bWantsToZoom;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player")
+	float ZoomedFOV;
+
+	float DefaultFOV;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Player", meta = (ClampMin = 0.0, ClampMax = 100))
+	float ZoomInterpSpeed;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
