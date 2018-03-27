@@ -3,7 +3,7 @@
 #include "SProjectileWeapon.h"
 #include "Engine/World.h"
 
-void ASProjectileWeapon::Fire()
+/*void ASProjectileWeapon::StartFire()
 {
 	AActor * MyOwner = GetOwner();
 	if (MyOwner)
@@ -20,4 +20,4 @@ void ASProjectileWeapon::Fire()
 
 		GetWorld()->SpawnActor<AActor>(ProjectileClass, MuzzleLocation, EyeRotation);
 	}
-}
+}*/
