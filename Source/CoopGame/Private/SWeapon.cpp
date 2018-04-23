@@ -24,6 +24,8 @@ ASWeapon::ASWeapon()
 
 	BaseDamage = 20.0f;
 	FireRate = 600.0f;
+
+	SetReplicates(true);
 }
 
 void ASWeapon::BeginPlay()
@@ -35,6 +37,11 @@ void ASWeapon::BeginPlay()
 
 void ASWeapon::Fire()
 {
+	if (Role < ROLE_Authority)
+	{
+		ServerFire();
+	}
+
 	AActor * MyOwner = GetOwner();
 	if (MyOwner)
 	{
@@ -101,6 +108,16 @@ void ASWeapon::Fire()
 		LastFireTime = GetWorld()->TimeSeconds;
 	}
 
+}
+
+void ASWeapon::ServerFire_Implementation()
+{
+	Fire();
+}
+
+bool ASWeapon::ServerFire_Validate()
+{
+	return true;
 }
 
 void ASWeapon::StartFire()

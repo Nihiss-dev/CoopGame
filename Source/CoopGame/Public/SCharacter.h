@@ -52,6 +52,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Player", meta = (ClampMin = 0.0, ClampMax = 100))
 	float ZoomInterpSpeed;
 
+	UPROPERTY(Replicated)
 	ASWeapon *CurrentWeapon;
 
 	void StartFire();
@@ -70,6 +71,7 @@ protected:
 	/*Pawn died previously*/
 	UPROPERTY(BlueprintReadOnly, Category = "Player")
 	bool bDied;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -56,6 +56,9 @@ protected:
 
 	void Fire();
 
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerFire();
+
 	FTimerHandle TimerHandle_TimerBetweenShots;
 
 	float LastFireTime;
